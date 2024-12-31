@@ -30,10 +30,8 @@ function Toggle({ name, icon, }) {
             x: window.innerWidth - rect.width - rect.x,
             y: rect.y + rect.height + 8,
         });
-
         openName === "" || openName !== name ? open(name) : close();
     }
-
     return (
         <ModalButton icon={<Icon name={icon} />} onClick={handleClick} tooltip={name}/>
     );
@@ -41,7 +39,7 @@ function Toggle({ name, icon, }) {
 
 function List({ name, children }) {
     const { openName, close, position } = useContext(MenusContext);
-    const ref = useOutSideClick(close);
+    const ref = useOutSideClick(close, false);
 
     if (openName !== name) return null;
 
