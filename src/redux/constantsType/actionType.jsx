@@ -28,3 +28,4 @@ export const SET_VIDEO_URL = 'SET_VIDEO_URL';
 export const TOGGLE_PLAYING_VIDEO = 'TOGGLE_PLAYING_VIDEO';
 export const ADD_VIDEO_URL = 'ADD_VIDEO_URL';
 export const DELETE_VIDEO_URL = 'DELETE_VIDEO_URL';
+export const SET_LOADING = "SET_LOADING";

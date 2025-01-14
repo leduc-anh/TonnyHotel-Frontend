@@ -120,3 +120,7 @@ export const deleteVideoUrl = (url) => ({
     type: "DELETE_VIDEO_URL",
     payload: url,
 });
+export const setLoading = (loading) => ({
+    type: "SET_LOADING",
+    payload: loading,
+});
