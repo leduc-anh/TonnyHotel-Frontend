@@ -124,3 +124,7 @@ export const setLoading = (loading) => ({
     type: "SET_LOADING",
     payload: loading,
 });
+export const setSceneList = (data) => ({
+    type: 'SET_SCENE_LIST',
+    payload: data,
+});

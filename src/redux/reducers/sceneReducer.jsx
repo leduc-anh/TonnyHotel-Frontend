@@ -1,5 +1,5 @@
 import { ADD_SCENE, DELETE_SCENE, SET_SCENE, SET_LOADING } from "../constantsType/actionType"
-import { SceneListData } from "../../components/Scene/SceneList"
+import  SceneListData  from "../../data/sceneListData";
 const INITIAL_STATE = {
     SceneListData: SceneListData,
     selectedScene: SceneListData[0],
