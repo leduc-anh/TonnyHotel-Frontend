@@ -16,15 +16,19 @@ Một cấu trúc dự án mẫu cho việc phát triển ứng dụng React hi�
 ```bash
 git clone https://github.com/leduc-anh/React-Vite-Tailwind-Setup.git
 cd React-Vite-Tailwind-Setup
+```
 2. Cài dependencies
+```bash
 npm install
 # hoặc
 yarn install
+```
 3. Chạy project
+```bash
 npm run dev
 # hoặc
 yarn dev
-
+```
 ## 💬 Góp ý & Đóng góp
 
 Nếu bạn thấy dự án này hữu ích, hãy ⭐ repo nhé!  
