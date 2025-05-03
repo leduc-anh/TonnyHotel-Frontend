@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import AppLayOut from '../components/AppLayOut';
+import AppLayOut from '../components/DefaultLayout';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
