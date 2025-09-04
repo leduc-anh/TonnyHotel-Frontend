@@ -59,6 +59,7 @@ export default {
         'scaleIn': 'scaleIn 0.3s ease-out',
         'scaleOut': 'scaleOut 0.3s ease-out',
         'blink': 'blink 0.8s infinite',
+        'slideUp': 'slideUp 0.8s ease-out forwards',
       },
       boxShadow: {
         '3xl': '0px 4px 8px rgba(0, 0, 0, 0.5)',
@@ -79,6 +80,10 @@ export default {
         blink: {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(40px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },
     },

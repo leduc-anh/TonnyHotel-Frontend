@@ -1,9 +1,18 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Moon, Sun } from 'lucide-react'; // icon đẹp, cài: pnpm add lucide-react
+import { Moon, Sun } from 'lucide-react';
 
 const LoginLayout = () => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [currentImage, setCurrentImage] = useState(0);
+
+  const images = [
+    '/picture1.jpg',
+    '/picture2.jpg',
+    '/picture3.jpg',
+    '/picture4.jpg',
+    '/picture5.jpg',
+  ];
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -14,56 +23,99 @@ const LoginLayout = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   return (
-    <div className='min-h-screen flex flex-col bg-gradient-to-br from-blue-100 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors'>
-      {/* Header */}
-      <header className='bg-white dark:bg-gray-800 shadow-md transition-colors'>
-        <div className='container mx-auto px-6 py-4 flex justify-between items-center'>
-          <h1 className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
-            TonnyHotel
-          </h1>
-          <div className='flex items-center gap-4'>
-            <nav className='space-x-4'>
-              <Link
-                to='/login'
-                className='text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400'
+    <div className='relative min-h-screen flex flex-col transition-colors overflow-hidden'>
+      <div className='absolute inset-0 z-0'>
+        {images.map((img, index) => (
+          <img
+            key={index}
+            src={img}
+            alt={`bg-${index}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+              index === currentImage ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
+        <div className='absolute inset-0 bg-black/50 dark:bg-black/60'></div>
+      </div>
+      <div className='relative z-10 flex flex-col min-h-screen'>
+        <header className='bg-white/70 dark:bg-gray-800/70 backdrop-blur shadow-md transition-colors'>
+          <div className='container mx-auto px-6 py-3 flex justify-between items-center'>
+            <div className='flex items-center gap-3'>
+              <img
+                src='/logo.png'
+                alt='TonnyHotel Logo'
+                className='h-10 w-10 object-contain'
+              />
+              <h1
+                className='text-2xl font-bold  bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 bg-clip-text text-transparent'
+                style={{ fontFamily: 'Times New Roman, serif' }}
               >
-                Login
-              </Link>
-              <Link
-                to='/register'
-                className='text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400'
+                TonnyHotel
+              </h1>
+            </div>
+            <div className='flex items-center gap-4'>
+              <nav className='space-x-4'>
+                <Link
+                  to='/login'
+                  className='text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400'
+                >
+                  Login
+                </Link>
+                <Link
+                  to='/register'
+                  className='text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400'
+                >
+                  Register
+                </Link>
+              </nav>
+              <button
+                onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                className='p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-105 transition'
               >
-                Register
-              </Link>
-            </nav>
-
-            {/* Nút toggle theme */}
-            <button
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              className='p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-105 transition'
-            >
-              {theme === 'light' ? (
-                <Moon className='w-5 h-5 text-gray-800' />
-              ) : (
-                <Sun className='w-5 h-5 text-yellow-400' />
-              )}
-            </button>
+                {theme === 'light' ? (
+                  <Moon className='w-5 h-5 text-gray-800' />
+                ) : (
+                  <Sun className='w-5 h-5 text-yellow-400' />
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Nội dung chính */}
-      <main className='flex-grow container mx-auto px-6 py-8 flex items-center justify-center'>
-        <div className='w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transition-colors'>
-          <Outlet />
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className='bg-white dark:bg-gray-800 border-t dark:border-gray-700 py-4 text-center text-gray-500 dark:text-gray-400 transition-colors'>
-        © 2025 TonnyHotel. All rights reserved.
-      </footer>
+        <main className='flex-grow container mx-auto px-6 py-8 flex gap-6'>
+          <div className='flex-1 relative rounded-2xl overflow-hidden shadow-lg flex flex-col items-center justify-center p-8'>
+            <img
+              src='/logo.png'
+              alt='Hotel Logo'
+              className='w-20 h-20 object-contain mb-6'
+            />
+            <h2
+              className='text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 bg-clip-text text-transparent text-center'
+              style={{ fontFamily: 'Times New Roman, serif' }}
+            >
+              Welcome to TonnyHotel
+            </h2>
+            <p className='text-lg text-white max-w-lg leading-relaxed text-center'>
+              Trải nghiệm kỳ nghỉ sang trọng với dịch vụ 5 sao, phòng nghỉ tiện
+              nghi và không gian đẳng cấp. Đặt phòng ngay hôm nay để tận hưởng
+              những khoảnh khắc tuyệt vời.
+            </p>
+          </div>
+          <div className='w-1/3 bg-white/90 dark:bg-gray-800/90 rounded-2xl shadow-xl p-8 flex items-center justify-center'>
+            <div className='w-full max-w-md'>
+              <Outlet />
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
