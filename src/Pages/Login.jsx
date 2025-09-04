@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { loginSuccess } from '../redux/reducers/useReducer'; // nhớ đúng file reducer
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Login = () => {
@@ -91,12 +91,12 @@ const Login = () => {
         </div>
         <p className='text-sm text-center text-gray-600 dark:text-gray-300'>
           Chưa có tài khoản?{' '}
-          <a
-            href='/register'
+          <Link
+            to='/register'
             className='text-blue-500 hover:text-purple-500 font-semibold transition'
           >
             Đăng ký ngay
-          </a>
+          </Link>
         </p>
       </form>
     </div>

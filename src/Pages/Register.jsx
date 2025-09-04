@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Register = () => {
   const [form, setForm] = useState({
     username: '',
-    fullname: '',
     email: '',
     password: '',
     phone: '',
@@ -19,7 +18,7 @@ const Register = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.username || !form.fullname || !form.email || !form.password) {
+    if (!form.username || !form.email || !form.password) {
       toast.error('Vui lòng nhập đầy đủ thông tin bắt buộc!');
       return;
     }
@@ -60,18 +59,6 @@ const Register = () => {
         </div>
         <div className='mb-4'>
           <label className='block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1'>
-            Full name
-          </label>
-          <input
-            type='text'
-            name='fullname'
-            placeholder='Họ và tên'
-            className='w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600'
-            onChange={handleChange}
-          />
-        </div>
-        <div className='mb-4'>
-          <label className='block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1'>
             Email
           </label>
           <input
@@ -89,7 +76,7 @@ const Register = () => {
           <input
             type='password'
             name='password'
-            placeholder='••••••••'
+            placeholder='password'
             className='w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600'
             onChange={handleChange}
           />
@@ -134,12 +121,12 @@ const Register = () => {
 
         <p className='text-sm text-center text-gray-600 dark:text-gray-300'>
           Đã có tài khoản?{' '}
-          <a
-            href='/login'
+          <Link
+            to='/login'
             className='text-blue-500 hover:text-purple-500 font-semibold transition'
           >
             Đăng nhập ngay
-          </a>
+          </Link>
         </p>
       </form>
     </div>
