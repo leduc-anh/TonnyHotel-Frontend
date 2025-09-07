@@ -1,7 +1,6 @@
 
 import { combineReducers } from 'redux';
-// import các reducer khác nếu có
-import userReducer from "./useReducer";
+import userReducer from "./userSlice";
 const rootReducer = combineReducers({
     user: userReducer
 });

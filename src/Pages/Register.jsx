@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Register = () => {
+  const API_URL = import.meta.env.VITE_API_URL;
   const [form, setForm] = useState({
     username: '',
     email: '',
@@ -25,7 +26,7 @@ const Register = () => {
 
     try {
       setLoading(true);
-      await axios.post('http://localhost:5000/api/auth/register', form);
+      await axios.post(`${API_URL}/auth/register`, form);
       toast.success('Đăng ký thành công!');
       navigate('/login');
     } catch (err) {
@@ -80,6 +81,10 @@ const Register = () => {
             className='w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600'
             onChange={handleChange}
           />
+          <div className='flex items-center justify-between text-xs text-gray-500 mt-1'>
+            Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và ký
+            tự đặc biệt.
+          </div>
         </div>
         <div className='mb-4'>
           <label className='block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1'>

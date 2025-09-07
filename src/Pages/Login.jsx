@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
-import { loginSuccess } from '../redux/reducers/useReducer'; // nhớ đúng file reducer
+import { loginSuccess } from '../redux/reducers/userSlice/';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -11,7 +11,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
@@ -20,7 +20,7 @@ const Login = () => {
     }
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:5000/api/auth/login', {
+      const res = await axios.post(`${API_URL}/auth/login`, {
         email,
         password,
       });

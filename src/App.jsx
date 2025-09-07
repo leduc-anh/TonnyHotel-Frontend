@@ -5,6 +5,8 @@ import { Toaster } from 'react-hot-toast';
 import Login from './Pages/Login';
 import LoginLayout from './components/LoginLayout';
 import Register from './Pages/Register';
+import Home from './Pages/Home';
+import Profile from './Pages/Profile';
 
 function App() {
   const queryClient = new QueryClient({
@@ -20,7 +22,10 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
-            <Route path='/' element={<AppLayOut />} />
+            <Route element={<AppLayOut />}>
+              <Route path='/' element={<Home />} />
+              <Route path='/profile' element={<Profile />} />
+            </Route>
             <Route element={<LoginLayout />}>
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
