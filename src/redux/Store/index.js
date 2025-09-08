@@ -1,6 +1,7 @@
 // src/redux/Store/index.js
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../reducers/userSlice';
+import roomReducer from '../reducers/roomSlice';
 import {
   persistStore,
   persistReducer,
@@ -23,6 +24,7 @@ const persistedReducer = persistReducer(persistConfig, userReducer);
 export const store = configureStore({
   reducer: {
     user: persistedReducer,
+    room: roomReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

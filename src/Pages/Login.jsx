@@ -39,7 +39,7 @@ const Login = () => {
   };
 
   return (
-    <div className='flex justify-center items-center min-h-[70vh] animate-slideUp opacity-0'>
+    <div className='flex justify-center items-center min-h-[70vh]  animate-slideUp opacity-0'>
       <form
         onSubmit={handleSubmit}
         className='bg-none dark:bg-gray-800/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-96 transition-colors border border-gray-200 dark:border-gray-700'

@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import HomeServices from '../components/HomeServices';
+import { Link } from 'react-router-dom';
+import HomeRooms from '../components/HomeRooms';
 
 function Home() {
   return (
@@ -39,13 +41,13 @@ function Home() {
             </p>
 
             <div className='flex gap-4 '>
-              <a
-                href='/rooms'
+              <Link
+                to='/rooms'
                 className='px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 
                            text-black font-semibold hover:opacity-90 transition shadow-lg'
               >
                 Xem phòng
-              </a>
+              </Link>
               <a
                 href='/about'
                 className='px-6 py-3 rounded-xl border border-white text-white hover:bg-white/20 transition'
@@ -105,6 +107,7 @@ function Home() {
         </div>
       </section>
       <HomeServices />
+      <HomeRooms />
     </div>
   );
 }

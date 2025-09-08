@@ -1,10 +1,11 @@
 import { Link, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Menu, X } from 'lucide-react';
 
 const LoginLayout = () => {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const [currentImage, setCurrentImage] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   const images = [
     '/picture1.jpg',
@@ -22,7 +23,6 @@ const LoginLayout = () => {
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
-
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
@@ -45,23 +45,24 @@ const LoginLayout = () => {
         ))}
         <div className='absolute inset-0 bg-black/50 dark:bg-black/60'></div>
       </div>
+
       <div className='relative z-10 flex flex-col min-h-screen'>
-        <header className='bg-white/70 dark:bg-gray-800/70 backdrop-blur shadow-md transition-colors'>
+        <header className='bg-white/70 dark:bg-gray-800/70 backdrop-blur shadow-md transition-colors fixed top-0 left-0 w-full z-50'>
           <div className='container mx-auto px-6 py-3 flex justify-between items-center'>
-            <div className='flex items-center gap-3'>
+            <Link to='/' className='flex items-center gap-3'>
               <img
                 src='/logo.png'
                 alt='TonnyHotel Logo'
                 className='h-10 w-10 object-contain'
               />
               <h1
-                className='text-2xl font-bold  bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 bg-clip-text text-transparent'
+                className='text-2xl font-bold bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 bg-clip-text text-transparent'
                 style={{ fontFamily: 'Times New Roman, serif' }}
               >
                 TonnyHotel
               </h1>
-            </div>
-            <div className='flex items-center gap-4'>
+            </Link>
+            <div className='hidden md:flex items-center gap-6'>
               <nav className='space-x-4'>
                 <Link
                   to='/login'
@@ -87,11 +88,51 @@ const LoginLayout = () => {
                 )}
               </button>
             </div>
+
+            <button
+              className='md:hidden p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition'
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
+          {isOpen && (
+            <div className='md:hidden bg-white/90 dark:bg-gray-800/90 backdrop-blur shadow-md px-6 py-4 flex flex-col gap-4'>
+              <Link
+                to='/login'
+                onClick={() => setIsOpen(false)}
+                className='text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400'
+              >
+                Login
+              </Link>
+              <Link
+                to='/register'
+                onClick={() => setIsOpen(false)}
+                className='text-gray-700 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400'
+              >
+                Register
+              </Link>
+              <button
+                onClick={() => {
+                  setTheme(theme === 'light' ? 'dark' : 'light');
+                  setIsOpen(false);
+                }}
+                className='p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-105 transition w-fit'
+              >
+                {theme === 'light' ? (
+                  <Moon className='w-5 h-5 text-gray-800' />
+                ) : (
+                  <Sun className='w-5 h-5 text-yellow-400' />
+                )}
+              </button>
+            </div>
+          )}
         </header>
 
-        <main className='flex-grow container mx-auto px-6 py-8 flex gap-6'>
-          <div className='flex-1 relative rounded-2xl overflow-hidden shadow-lg flex flex-col items-center justify-center p-8'>
+        {/* Main */}
+        <main className='flex-grow container mx-auto px-6 py-24 flex gap-6'>
+          {/* Left section: hide on mobile */}
+          <div className='hidden md:flex flex-1 relative rounded-2xl overflow-hidden shadow-lg flex-col items-center justify-center p-8'>
             <img
               src='/logo.png'
               alt='Hotel Logo'
@@ -109,7 +150,8 @@ const LoginLayout = () => {
               những khoảnh khắc tuyệt vời.
             </p>
           </div>
-          <div className='w-1/3 bg-white/90 dark:bg-gray-800/90 rounded-2xl shadow-xl p-8 flex items-center justify-center'>
+
+          <div className='w-full md:w-1/3 rounded-2xl shadow-xl md:p-8 flex items-center justify-center'>
             <div className='w-full max-w-md'>
               <Outlet />
             </div>
