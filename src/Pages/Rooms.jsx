@@ -20,7 +20,6 @@ const Rooms = () => {
 
   if (loading) return <p className='text-center mt-10'>Đang tải...</p>;
 
-  // Lọc phòng theo filter
   const filteredRooms = rooms.filter((room) => {
     const matchType = filter.type ? room.roomType === filter.type : true;
     const matchStatus = filter.status ? room.status === filter.status : true;

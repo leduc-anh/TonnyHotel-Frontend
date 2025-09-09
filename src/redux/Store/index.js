@@ -2,6 +2,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../reducers/userSlice';
 import roomReducer from '../reducers/roomSlice';
+import serviceReducer from '../reducers/serviceSlice';
 import {
   persistStore,
   persistReducer,
@@ -25,6 +26,7 @@ export const store = configureStore({
   reducer: {
     user: persistedReducer,
     room: roomReducer,
+    service: serviceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
