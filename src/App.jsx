@@ -9,6 +9,7 @@ import Home from './Pages/Home';
 import Profile from './Pages/Profile';
 import Rooms from './Pages/Rooms';
 import Services from './Pages/Services';
+import RoomDetail from './Pages/RoomDetail';
 
 function App() {
   const queryClient = new QueryClient({
@@ -29,6 +30,7 @@ function App() {
               <Route path='/profile' element={<Profile />} />
               <Route path='/rooms' element={<Rooms />} />
               <Route path='/services' element={<Services />} />
+              <Route path='/rooms/:id' element={<RoomDetail />} />
             </Route>
             <Route element={<LoginLayout />}>
               <Route path='/login' element={<Login />} />

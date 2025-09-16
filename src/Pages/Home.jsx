@@ -58,7 +58,7 @@ function Home() {
           </motion.div>
         </div>
       </section>
-      <section className='transition-colors transition duration-500 ease-in-out px-6 py-16 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800'>
+      <section className='transition-colors  duration-500 ease-in-out px-6 py-16 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto font-sans'>
           <motion.div
             className='bg-white/70 dark:bg-gray-800/70 backdrop-blur-md rounded-2xl p-6 shadow-md'

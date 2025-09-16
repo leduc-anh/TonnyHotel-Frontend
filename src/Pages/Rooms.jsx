@@ -90,15 +90,14 @@ const Rooms = () => {
 
           <button
             onClick={() => setFilter({ type: '', status: '', price: '' })}
-            className='w-full px-4 py-2 rounded-full rounded-xl bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 
-                           text-black font-semibold hover:opacity-90 transition shadow-lg
+            className='w-full px-4 py-2 rounded-full  bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 
+                           text-black font-semibold hover:opacity-90  shadow-lg
                        transition-transform hover:scale-105'
           >
             Xóa bộ lọc
           </button>
         </div>
 
-        {/* Danh sách phòng */}
         <div className='md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 pl-6'>
           {filteredRooms.length > 0 ? (
             filteredRooms.map((room) => (
@@ -115,7 +114,6 @@ const Rooms = () => {
                   />
                 </div>
 
-                {/* Thông tin phòng */}
                 <div className='flex-1 p-6 flex flex-col justify-between'>
                   <div>
                     <h2 className='text-xl font-bold text-gray-800 dark:text-white'>
@@ -127,7 +125,6 @@ const Rooms = () => {
                         : room.description}
                     </p>
 
-                    {/* Đánh giá sao */}
                     <div className='flex items-center gap-1 my-2'>
                       {[...Array(5)].map((_, i) => (
                         <Star
@@ -150,12 +147,10 @@ const Rooms = () => {
                     <p className='text-lg font-semibold text-yellow-600 mt-2'>
                       {room.price.toLocaleString()} VNĐ / đêm
                     </p>
-
-                    {/* Nút xem chi tiết */}
                     <Link
                       to={`/rooms/${room._id}`}
-                      className='inline-block mt-3 px-4 py-2 rounded-full rounded-xl bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 
-                           text-black dark:text-white font-semibold hover:opacity-90 transition shadow-lg
+                      className='inline-block mt-3 px-4 py-2 rounded-full  bg-gradient-to-r from-yellow-200 via-orange-400 to-yellow-600 
+                           text-black dark:text-white font-semibold hover:opacity-90 
                                  shadow-md transition-transform transform hover:scale-105'
                     >
                       Xem chi tiết

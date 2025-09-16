@@ -8,6 +8,7 @@ export const fetchServices = createAsyncThunk('service/fetchServices', async () 
     return res.data;
 });
 
+
 const serviceSlice = createSlice({
     name: 'service',
     initialState: { services: [], loading: false },

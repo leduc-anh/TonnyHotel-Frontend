@@ -8,7 +8,7 @@ function AppLayOut() {
     <>
       <Header />
       <div className={cn('flex flex-col min-h-screen')}>
-        <main className={cn('flex-1')}>
+        <main className={cn('flex-1 dark:bg-gray-800 dark:text-white')}>
           <Outlet />
         </main>
         <footer

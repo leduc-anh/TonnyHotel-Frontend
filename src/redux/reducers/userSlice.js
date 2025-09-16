@@ -25,11 +25,6 @@ export const updateUser = createAsyncThunk(
       const { token, user } = getState().user;
       if (!token) throw new Error("Token chưa có");
       if (!user?._id) throw new Error("User chưa load xong");
-
-      console.log("PUT /user/:id", user._id);
-      console.log("Token:", token);
-      console.log("Payload:", updatedData);
-
       const { data } = await axios.put(`/user/${user._id}`, updatedData, {
         headers: { Authorization: `Bearer ${token}` },
       });
