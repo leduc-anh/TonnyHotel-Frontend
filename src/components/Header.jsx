@@ -74,7 +74,7 @@ function Header() {
         {user ? (
           <>
             <Link
-              to='/bookings'
+              to='/my-booking'
               className='hover:scale-110 transition-transform'
             >
               Phòng đã đặt

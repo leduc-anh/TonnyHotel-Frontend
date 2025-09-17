@@ -6,7 +6,7 @@ import {
   addReview,
   deleteReview,
 } from '../redux/reducers/roomSlice';
-
+import BookingModal from '../components/BookingModal';
 function RoomDetail() {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ function RoomDetail() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [showForm, setShowForm] = useState(false);
-
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   useEffect(() => {
     dispatch(fetchRoomById(id));
   }, [dispatch, id]);
@@ -50,7 +50,6 @@ function RoomDetail() {
   return (
     <div className='container mx-auto mt-24 px-6 mb-20'>
       <div className='grid md:grid-cols-2 gap-16'>
-        {/* Image Gallery - Left Side */}
         <div>
           {mainImage && (
             <img
@@ -73,8 +72,6 @@ function RoomDetail() {
             ))}
           </div>
         </div>
-
-        {/* Room Info - Right Side */}
         <div className='flex flex-col pt-4'>
           <div>
             <span className='inline-block bg-indigo-100 text-indigo-800 text-sm font-semibold px-4 py-1 rounded-full mb-3'>
@@ -124,10 +121,11 @@ function RoomDetail() {
                 </p>
               </div>
             </div>
-
-            {/* Action Buttons */}
             <div className='flex gap-4 mb-8'>
-              <button className='flex-1 px-6 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300'>
+              <button
+                onClick={() => setIsBookingModalOpen(true)}
+                className='flex-1 px-6 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300'
+              >
                 Đặt phòng ngay
               </button>
               <button
@@ -140,8 +138,6 @@ function RoomDetail() {
           </div>
         </div>
       </div>
-
-      {/* Review Form (Conditional) */}
       {showForm && (
         <div className='my-12 p-8 bg-slate-50 dark:bg-gray-800 rounded-xl shadow-inner'>
           <form
@@ -248,6 +244,12 @@ function RoomDetail() {
           )}
         </div>
       </div>
+      {isBookingModalOpen && (
+        <BookingModal
+          room={selectedRoom}
+          onClose={() => setIsBookingModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

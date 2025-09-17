@@ -1,8 +1,9 @@
-// src/redux/Store/index.js
+
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from '../reducers/userSlice';
 import roomReducer from '../reducers/roomSlice';
 import serviceReducer from '../reducers/serviceSlice';
+import bookingReducer from '../reducers/bookingSlice';
 import {
   persistStore,
   persistReducer,
@@ -27,6 +28,7 @@ export const store = configureStore({
     user: persistedReducer,
     room: roomReducer,
     service: serviceReducer,
+    booking: bookingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

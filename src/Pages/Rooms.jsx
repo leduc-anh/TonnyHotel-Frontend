@@ -28,11 +28,7 @@ const Rooms = () => {
   });
 
   return (
-    <div
-      className='min-h-screen bg-cover bg-center bg-fixed py-24 px-8 
-             backdrop-blur-2xl bg-black/80 bg-blend-multiply'
-      style={{ backgroundImage: "url('/background3.jpg')" }}
-    >
+    <div className='mt-20 m-3'>
       <h1 className='text-4xl font-bold text-center text-yellow-500 mb-10 drop-shadow-lg'>
         Danh sách Phòng
       </h1>
@@ -103,7 +99,7 @@ const Rooms = () => {
             filteredRooms.map((room) => (
               <div
                 key={room._id}
-                className=' rounded-xl flex bg-white/95 dark:bg-gray-800/95 shadow-lg  
+                className=' rounded-xl flex bg-white/95 dark:bg-gray-700/95 shadow-lg  
                            hover:scale-[1.02] transition-transform overflow-hidden'
               >
                 <div className='w-1/2 h-full'>
