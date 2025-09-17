@@ -11,6 +11,11 @@ import Rooms from './Pages/Rooms';
 import Services from './Pages/Services';
 import RoomDetail from './Pages/RoomDetail';
 import MyBooking from './Pages/MyBooking';
+import PrivateRoute from './components/ProtectedRoute.jsx';
+import AdminDashboard from './Pages/admin/AdminDashboard.jsx';
+import AdminRooms from './Pages/admin/AdminRooms.jsx';
+import AdminBookings from './Pages/admin/AdminBookings.jsx';
+import AdminLayout from './Pages/admin/AdminLayout.jsx';
 
 function App() {
   const queryClient = new QueryClient({
@@ -22,45 +27,99 @@ function App() {
   });
 
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<AppLayOut />}>
-              <Route path='/' element={<Home />} />
-              <Route path='/profile' element={<Profile />} />
-              <Route path='/rooms' element={<Rooms />} />
-              <Route path='/services' element={<Services />} />
-              <Route path='/rooms/:id' element={<RoomDetail />} />
-              <Route path='/my-booking' element={<MyBooking />} />
-            </Route>
-            <Route element={<LoginLayout />}>
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register />} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-        <Toaster
-          position='top-center'
-          gutter={12}
-          containerStyle={{ margin: '18px 0' }}
-          toastOptions={{
-            success: {
-              duration: 3000,
-            },
-            error: {
-              duration: 5000,
-            },
-            style: {
-              fontSize: '16px',
-              maxWidth: '500px',
-              padding: '16px 24px',
-              backgroundColor: 'white',
-            },
-          }}
-        />
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          {/* User routes */}
+          <Route element={<AppLayOut />}>
+            <Route
+              path='/'
+              element={
+                <PrivateRoute role='user'>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/profile'
+              element={
+                <PrivateRoute role='user'>
+                  <Profile />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/rooms'
+              element={
+                <PrivateRoute role='user'>
+                  <Rooms />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/services'
+              element={
+                <PrivateRoute role='user'>
+                  <Services />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/rooms/:id'
+              element={
+                <PrivateRoute role='user'>
+                  <RoomDetail />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path='/my-booking'
+              element={
+                <PrivateRoute role='user'>
+                  <MyBooking />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+
+          {/* Admin routes */}
+          <Route
+            path='/admin'
+            element={
+              <PrivateRoute role='admin'>
+                <AdminLayout />
+              </PrivateRoute>
+            }
+          >
+            <Route path='dashboard' element={<AdminDashboard />} />
+            <Route path='rooms' element={<AdminRooms />} />
+            <Route path='bookings' element={<AdminBookings />} />
+          </Route>
+
+          {/* Auth routes */}
+          <Route element={<LoginLayout />}>
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+
+      <Toaster
+        position='top-center'
+        gutter={12}
+        containerStyle={{ margin: '18px 0' }}
+        toastOptions={{
+          success: { duration: 3000 },
+          error: { duration: 5000 },
+          style: {
+            fontSize: '16px',
+            maxWidth: '500px',
+            padding: '16px 24px',
+            backgroundColor: 'white',
+          },
+        }}
+      />
+    </QueryClientProvider>
   );
 }
 

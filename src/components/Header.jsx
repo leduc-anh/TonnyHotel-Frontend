@@ -1,25 +1,26 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Moon, Sun, LogOut, Menu, X } from 'lucide-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, loginSuccess } from '../redux/reducers/userSlice';
 
 function Header() {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem('theme') === 'dark',
   );
-  const [isOpen, setIsOpen] = useState(false); // sidebar toggle
-  const navigate = useNavigate();
-  const { user: reduxUser } = useSelector((state) => state.user);
-  // Lấy user từ localStorage
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
 
-  // Dark mode toggle
+  useEffect(() => {
+    const stored = localStorage.getItem('user');
+    if (stored) {
+      dispatch(loginSuccess(JSON.parse(stored)));
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -32,7 +33,7 @@ function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
-    setUser(null);
+    dispatch(logout());
     navigate('/login');
   };
 
@@ -59,7 +60,6 @@ function Header() {
         </span>
       </Link>
 
-      {/* Desktop Menu */}
       <nav className='hidden md:flex items-center gap-6 text-lg font-medium'>
         <Link to='/rooms' className='hover:scale-110 transition-transform'>
           Phòng
@@ -84,13 +84,9 @@ function Header() {
               className='flex items-center gap-2 hover:scale-105 transition-transform'
             >
               <div className='w-9 h-9 rounded-full bg-yellow-500 flex items-center justify-center font-bold text-black'>
-                {reduxUser?.username
-                  ? reduxUser.username.charAt(0).toUpperCase()
-                  : 'U'}
+                {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
               </div>
-              <span className='font-medium'>
-                {reduxUser?.username || 'Khách'}
-              </span>
+              <span className='font-medium'>{user.username || 'Khách'}</span>
             </Link>
             <button
               onClick={handleLogout}
@@ -129,11 +125,11 @@ function Header() {
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Mobile Sidebar */}
       {isOpen && (
         <div
           className='absolute top-0 right-0 h-screen w-64 bg-black/95 backdrop-blur-md 
-                      shadow-xl flex flex-col p-6 gap-6 text-lg md:hidden transition-all text-black/80 dark:text-white/80'
+                      shadow-xl flex flex-col p-6 gap-6 text-lg md:hidden transition-all 
+                      text-black/80 dark:text-white/80'
         >
           <div className='flex items-center gap-3 border-b border-white/20 pb-4'>
             <Link
@@ -142,46 +138,25 @@ function Header() {
               className='flex items-center gap-3'
             >
               <div className='w-9 h-9 rounded-full bg-yellow-500 flex items-center justify-center font-bold text-black'>
-                {reduxUser?.username
-                  ? reduxUser.username.charAt(0).toUpperCase()
-                  : 'U'}
+                {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
               </div>
-              <span className='font-medium'>
-                {reduxUser?.username || 'Khách'}
-              </span>
+              <span className='font-medium'>{user?.username || 'Khách'}</span>
             </Link>
           </div>
 
-          {/* Menu */}
-          <Link
-            to='/rooms'
-            onClick={() => setIsOpen(false)}
-            className='hover:scale-105 transition-transform'
-          >
+          <Link to='/rooms' onClick={() => setIsOpen(false)}>
             Phòng
           </Link>
-          <Link
-            to='/services'
-            onClick={() => setIsOpen(false)}
-            className='hover:scale-105 transition-transform'
-          >
+          <Link to='/services' onClick={() => setIsOpen(false)}>
             Dịch vụ
           </Link>
-          <Link
-            to='/contact'
-            onClick={() => setIsOpen(false)}
-            className='hover:scale-105 transition-transform'
-          >
+          <Link to='/contact' onClick={() => setIsOpen(false)}>
             Liên hệ
           </Link>
 
           {user ? (
             <>
-              <Link
-                to='/bookings'
-                onClick={() => setIsOpen(false)}
-                className='hover:scale-105 transition-transform'
-              >
+              <Link to='/my-booking' onClick={() => setIsOpen(false)}>
                 Phòng đã đặt
               </Link>
               <button
@@ -193,18 +168,10 @@ function Header() {
             </>
           ) : (
             <>
-              <Link
-                to='/login'
-                onClick={() => setIsOpen(false)}
-                className='hover:scale-105 transition-transform'
-              >
+              <Link to='/login' onClick={() => setIsOpen(false)}>
                 Đăng nhập
               </Link>
-              <Link
-                to='/register'
-                onClick={() => setIsOpen(false)}
-                className='hover:scale-105 transition-transform'
-              >
+              <Link to='/register' onClick={() => setIsOpen(false)}>
                 Đăng ký
               </Link>
             </>

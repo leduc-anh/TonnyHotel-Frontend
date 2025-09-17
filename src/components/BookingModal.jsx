@@ -11,9 +11,11 @@ import {
 
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { useNavigate } from 'react-router-dom';
 
 function BookingModal({ room, onClose }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { services, loading: servicesLoading } = useSelector(
     (state) => state.service,
   );
@@ -41,8 +43,9 @@ function BookingModal({ room, onClose }) {
     if (success) {
       alert('Đặt phòng thành công!');
       onClose();
+      navigate('/my-booking');
     }
-  }, [success, onClose]);
+  }, [success, onClose, navigate]);
   const handleServiceChange = (service) => {
     setSelectedServices((prev) => {
       const newSelection = { ...prev };

@@ -12,7 +12,8 @@ function RoomDetail() {
   const dispatch = useDispatch();
   const { selectedRoom, loading, error, reviewLoading, reviewError } =
     useSelector((state) => state.room);
-  const { user } = useSelector((state) => state.user);
+
+  const { user, token } = useSelector((state) => state.user);
   const [mainImage, setMainImage] = useState(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -123,13 +124,26 @@ function RoomDetail() {
             </div>
             <div className='flex gap-4 mb-8'>
               <button
-                onClick={() => setIsBookingModalOpen(true)}
+                onClick={() => {
+                  if (!token) {
+                    alert('Bạn cần đăng nhập để đặt phòng');
+                    return;
+                  }
+                  setIsBookingModalOpen(true);
+                }}
                 className='flex-1 px-6 py-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold text-lg hover:shadow-lg hover:scale-105 transition-all duration-300'
               >
                 Đặt phòng ngay
               </button>
+
               <button
-                onClick={() => setShowForm(!showForm)}
+                onClick={() => {
+                  if (!token) {
+                    alert('Bạn cần đăng nhập để viết đánh giá');
+                    return;
+                  }
+                  setShowForm(!showForm);
+                }}
                 className='flex-1 px-6 py-4 rounded-lg bg-slate-200 text-slate-800 font-bold hover:bg-slate-300 transition-all duration-300'
               >
                 {showForm ? 'Đóng đánh giá' : 'Viết đánh giá'}

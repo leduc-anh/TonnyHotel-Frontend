@@ -24,10 +24,18 @@ const Login = () => {
         email,
         password,
       });
+
       localStorage.setItem('user', JSON.stringify(res.data));
       dispatch(loginSuccess(res.data));
+
       toast.success('Đăng nhập thành công!');
-      navigate('/');
+
+      // ✅ Điều hướng theo role
+      if (res.data.user.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       console.error('Login failed:', err);
       toast.error(
