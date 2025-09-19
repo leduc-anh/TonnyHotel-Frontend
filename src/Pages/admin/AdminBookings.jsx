@@ -4,7 +4,7 @@ import { fetchAllBookings } from '../../redux/reducers/bookingSlice';
 
 const AdminBookings = () => {
   const dispatch = useDispatch();
-  const { allBookings, allBookingsLoading, allBookingsError } = useSelector(
+  const { allBookings, allBookingsLoading } = useSelector(
     (state) => state.booking,
   );
 
@@ -12,9 +12,9 @@ const AdminBookings = () => {
     dispatch(fetchAllBookings());
   }, [dispatch]);
 
-  if (allBookingsLoading) return <p className='p-6'>Đang tải dữ liệu...</p>;
-  if (allBookingsError)
-    return <p className='p-6 text-red-600'>Lỗi: {allBookingsError}</p>;
+  if (allBookingsLoading) {
+    return <p className='p-6'>Đang tải dữ liệu...</p>;
+  }
 
   return (
     <div className='p-6'>
@@ -35,6 +35,7 @@ const AdminBookings = () => {
               <th className='border border-gray-300 px-4 py-2'>Hành động</th>
             </tr>
           </thead>
+
           <tbody>
             {allBookings.map((booking) => (
               <tr key={booking._id} className='text-center'>
@@ -51,7 +52,10 @@ const AdminBookings = () => {
                   {new Date(booking.checkOut).toLocaleDateString()}
                 </td>
                 <td className='border border-gray-300 px-4 py-2'>
-                  {booking.totalPrice} VND
+                  {new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                  }).format(booking.totalPrice)}
                 </td>
                 <td className='border border-gray-300 px-4 py-2'>
                   {booking.status}
@@ -61,7 +65,7 @@ const AdminBookings = () => {
                     Xác nhận
                   </button>
                   <button className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>
-                    Hủy
+                    Hủy Đơn
                   </button>
                 </td>
               </tr>

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../../redux/reducers/roomSlice';
+import { Link } from 'react-router-dom';
 
 const AdminRooms = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,9 @@ const AdminRooms = () => {
   return (
     <div className='p-6'>
       <h1 className='text-2xl font-bold mb-6'>Quản lý Phòng</h1>
+      <Link to='/rooms/add' className='btn'>
+        Tạo phòng
+      </Link>
 
       {rooms.length === 0 ? (
         <p>Chưa có phòng nào.</p>
@@ -36,7 +40,6 @@ const AdminRooms = () => {
           <tbody>
             {rooms.map((room) => (
               <tr key={room._id} className='text-center'>
-                {/* Hiển thị ảnh đầu tiên */}
                 <td className='border border-gray-300 px-4 py-2'>
                   {room.images?.length > 0 ? (
                     <img
@@ -68,9 +71,12 @@ const AdminRooms = () => {
                   ⭐ {room.averageRating || 0}
                 </td>
                 <td className='border border-gray-300 px-4 py-2 space-x-2'>
-                  <button className='bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600'>
+                  <Link
+                    to={`/admin/rooms/edit/${room._id}`}
+                    className='bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600'
+                  >
                     Sửa
-                  </button>
+                  </Link>
                   <button className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>
                     Xóa
                   </button>

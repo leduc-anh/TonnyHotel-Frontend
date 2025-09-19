@@ -14,7 +14,7 @@ const PrivateRoute = ({ children, role }) => {
   }
 
   if (role === 'user' && user?.role !== 'user') {
-    return <Navigate to='/admin' replace />;
+    return <Navigate to='/admin/dashboard' replace />;
   }
 
   return children;
@@ -22,7 +22,7 @@ const PrivateRoute = ({ children, role }) => {
 
 PrivateRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  role: PropTypes.string, // "admin" hoặc "user"
+  role: PropTypes.string,
 };
 
 export default PrivateRoute;

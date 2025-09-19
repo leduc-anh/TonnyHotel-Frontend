@@ -16,6 +16,7 @@ import AdminDashboard from './Pages/admin/AdminDashboard.jsx';
 import AdminRooms from './Pages/admin/AdminRooms.jsx';
 import AdminBookings from './Pages/admin/AdminBookings.jsx';
 import AdminLayout from './Pages/admin/AdminLayout.jsx';
+import AdminEditAddRoom from './Pages/admin/AdminEditAddRoom.jsx';
 
 function App() {
   const queryClient = new QueryClient({
@@ -30,7 +31,6 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          {/* User routes */}
           <Route element={<AppLayOut />}>
             <Route
               path='/'
@@ -81,8 +81,6 @@ function App() {
               }
             />
           </Route>
-
-          {/* Admin routes */}
           <Route
             path='/admin'
             element={
@@ -94,9 +92,9 @@ function App() {
             <Route path='dashboard' element={<AdminDashboard />} />
             <Route path='rooms' element={<AdminRooms />} />
             <Route path='bookings' element={<AdminBookings />} />
+            <Route path='rooms/add' element={<AdminEditAddRoom />} />
+            <Route path='rooms/edit/:id' element={<AdminEditAddRoom />} />
           </Route>
-
-          {/* Auth routes */}
           <Route element={<LoginLayout />}>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />

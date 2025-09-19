@@ -15,7 +15,7 @@ import {
   CartesianGrid,
 } from 'recharts';
 
-const COLORS = ['#4CAF50', '#F44336', '#FF9800']; // xanh: trống, đỏ: đã đặt, cam: sửa chữa
+const COLORS = ['#4CAF50', '#F44336', '#FF9800'];
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
