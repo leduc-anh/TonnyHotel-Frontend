@@ -17,7 +17,7 @@ const AdminRooms = () => {
   return (
     <div className='p-6'>
       <h1 className='text-2xl font-bold mb-6'>Quản lý Phòng</h1>
-      <Link to='/rooms/add' className='btn'>
+      <Link to='/admin/rooms/add' className='btn'>
         Tạo phòng
       </Link>
 
@@ -43,7 +43,7 @@ const AdminRooms = () => {
                 <td className='border border-gray-300 px-4 py-2'>
                   {room.images?.length > 0 ? (
                     <img
-                      src={`/rooms/${room.images[0]}`}
+                      src={`http://localhost:5000/rooms/${room.images[0]}`}
                       alt={room.roomType}
                       className='w-20 h-16 object-cover rounded'
                     />

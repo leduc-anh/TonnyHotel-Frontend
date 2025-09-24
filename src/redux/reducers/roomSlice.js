@@ -1,13 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../../lib/axios";
 
-// Lấy tất cả phòng
+
 export const fetchRooms = createAsyncThunk("room/fetchRooms", async () => {
     const res = await axios.get("/rooms");
     return res.data;
 });
+export const deleteRoom = createAsyncThunk("room/deleteRoom", async (id, { getState }) => {
+    const { token } = getState().user;
+    const res = await axios.delete(`/rooms/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+});
 
-// Lấy phòng theo ID
 export const fetchRoomById = createAsyncThunk("room/fetchRoomById", async (id) => {
     const res = await axios.get(`/rooms/${id}`);
     return res.data;
@@ -21,15 +27,14 @@ export const deleteRoomImage = createAsyncThunk(
 
             const res = await axios.delete(`/rooms/${roomId}/image`, {
                 headers: { Authorization: `Bearer ${token}` },
-                data: { imageName }, // Rất quan trọng: body của request DELETE nằm trong 'data'
+                data: { imageName },
             });
-            return res.data.room; // Backend trả về phòng đã được cập nhật
+            return res.data.room;
         } catch (err) {
             return rejectWithValue(err.response?.data?.message || err.message);
         }
     }
 );
-// Gửi review cho phòng
 export const addReview = createAsyncThunk(
     "room/addReview",
     async ({ roomId, rating, comment }, { getState, rejectWithValue }) => {
@@ -51,7 +56,7 @@ export const addReview = createAsyncThunk(
     }
 );
 
-// Xóa review
+
 export const deleteReview = createAsyncThunk(
     "room/deleteReview",
     async (roomId, { getState, rejectWithValue }) => {
@@ -63,25 +68,30 @@ export const deleteReview = createAsyncThunk(
                 headers: { Authorization: `Bearer ${token}` },
             });
 
-            return res.data; // backend trả về { reviews, averageRating }
+            return res.data;
         } catch (err) {
             return rejectWithValue(err.response?.data || err.message);
         }
     }
 );
 
-export const createRoom = createAsyncThunk("room/createRoom", async (formData, { getState }) => {
-    const { token } = getState().user;
-    const res = await axios.post("/rooms", formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    return res.data;
-});
-
-// ✅ Cập nhật phòng
+export const createRoom = createAsyncThunk(
+    "room/createRoom",
+    async (formData, { getState, rejectWithValue }) => {
+        try {
+            const { token } = getState().user;
+            const res = await axios.post("/rooms", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return res.data;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+);
 export const updateRoom = createAsyncThunk("room/updateRoom", async ({ id, formData }, { getState }) => {
     const { token } = getState().user;
     const res = await axios.patch(`/rooms/${id}`, formData, {
@@ -113,7 +123,6 @@ const roomSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // Fetch rooms
             .addCase(fetchRooms.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -127,7 +136,6 @@ const roomSlice = createSlice({
                 state.error = action.error.message;
             })
 
-            // Fetch room by ID
             .addCase(fetchRoomById.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -141,7 +149,6 @@ const roomSlice = createSlice({
                 state.error = action.error.message;
             })
 
-            // Add review
             .addCase(addReview.pending, (state) => {
                 state.reviewLoading = true;
                 state.reviewError = null;
@@ -157,7 +164,6 @@ const roomSlice = createSlice({
                 state.reviewError = action.payload || "Có lỗi xảy ra";
             })
 
-            // Delete review
             .addCase(deleteReview.fulfilled, (state, action) => {
                 state.reviewLoading = false;
                 state.reviewSuccess = true;
@@ -168,30 +174,25 @@ const roomSlice = createSlice({
                 state.reviewLoading = false;
                 state.reviewError = action.payload || "Không thể xóa review";
             })
-
-            // ✅ Create room
             .addCase(createRoom.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(createRoom.fulfilled, (state, action) => {
                 state.loading = false;
-                state.rooms.push(action.payload); // thêm phòng mới vào list
+                state.rooms.push(action.payload);
             })
             .addCase(createRoom.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Không thể thêm phòng";
             })
-
-            // ✅ Update room
             .addCase(updateRoom.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(updateRoom.fulfilled, (state, action) => {
                 state.loading = false;
-                state.selectedRoom = action.payload; // Cập nhật phòng đang chọn
-                // Cập nhật phòng trong danh sách chung
+                state.selectedRoom = action.payload;
                 const index = state.rooms.findIndex((r) => r._id === action.payload._id);
                 if (index !== -1) {
                     state.rooms[index] = action.payload;
@@ -201,15 +202,12 @@ const roomSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || "Không thể cập nhật phòng";
             })
-
-            // ✅ THÊM: Xử lý xóa ảnh
             .addCase(deleteRoomImage.pending, (state) => {
-                state.loading = true; // Báo hiệu đang có thao tác
+                state.loading = true;
                 state.error = null;
             })
             .addCase(deleteRoomImage.fulfilled, (state, action) => {
                 state.loading = false;
-                // Cập nhật lại selectedRoom với dữ liệu mới từ server
                 state.selectedRoom = action.payload;
             })
             .addCase(deleteRoomImage.rejected, (state, action) => {

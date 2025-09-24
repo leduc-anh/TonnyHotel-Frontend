@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
+  fetchRooms,
   fetchRoomById,
   updateRoom,
   createRoom,
@@ -13,8 +14,10 @@ const AdminEditAddRoom = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { selectedRoom, loading, error } = useSelector((state) => state.room);
-
+  const { rooms, selectedRoom, loading, error } = useSelector(
+    (state) => state.room,
+  );
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     roomNumber: '',
     roomType: '',
@@ -23,6 +26,10 @@ const AdminEditAddRoom = () => {
     description: '',
   });
   const [newImages, setNewImages] = useState([]);
+
+  useEffect(() => {
+    dispatch(fetchRooms());
+  }, [dispatch]);
 
   useEffect(() => {
     if (id) {
@@ -53,6 +60,9 @@ const AdminEditAddRoom = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
   };
 
   const handleFileChange = (e) => {
@@ -70,8 +80,47 @@ const AdminEditAddRoom = () => {
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.roomNumber) {
+      newErrors.roomNumber = 'Số phòng là bắt buộc.';
+    } else if (!/^\d+$/.test(formData.roomNumber)) {
+      newErrors.roomNumber = 'Số phòng phải là một số nguyên.';
+    } else {
+      const roomNumber = parseInt(formData.roomNumber, 10);
+      const isDuplicate = rooms.find((room) => {
+        if (id) {
+          return room.roomNumber === roomNumber && room._id !== id;
+        }
+        return room.roomNumber === roomNumber;
+      });
+
+      if (isDuplicate) {
+        newErrors.roomNumber = 'Số phòng này đã tồn tại.';
+      }
+    }
+
+    if (!formData.roomType) {
+      newErrors.roomType = 'Vui lòng chọn loại phòng.';
+    }
+
+    if (!formData.price) {
+      newErrors.price = 'Giá phòng là bắt buộc.';
+    } else if (parseInt(formData.price, 10) <= 0) {
+      newErrors.price = 'Giá phòng phải lớn hơn 0.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
     const data = new FormData();
     Object.keys(formData).forEach((key) => data.append(key, formData[key]));
     if (newImages.length > 0) {
@@ -79,6 +128,7 @@ const AdminEditAddRoom = () => {
         data.append('images', file);
       });
     }
+
     try {
       if (id) {
         await dispatch(updateRoom({ id, formData: data })).unwrap();
@@ -90,13 +140,13 @@ const AdminEditAddRoom = () => {
       navigate('/admin/rooms');
     } catch (err) {
       console.error('Submit form error:', err);
-      alert('Có lỗi xảy ra: ' + (err.message || JSON.stringify(err)));
+      alert('Có lỗi xảy ra: ' + (err || 'Vui lòng kiểm tra lại thông tin'));
     }
   };
 
   if (loading && !selectedRoom && id)
     return <p className='p-6'>Đang tải dữ liệu...</p>;
-  if (error) return <p className='p-6 text-red-600'>Lỗi: {error}</p>;
+  if (error && !id) return <p className='p-6 text-red-600'>Lỗi: {error}</p>;
 
   return (
     <div className='p-6 max-w-2xl mx-auto'>
@@ -107,6 +157,7 @@ const AdminEditAddRoom = () => {
       <form
         onSubmit={handleSubmit}
         className='space-y-4 bg-white p-6 rounded shadow'
+        noValidate
       >
         <div>
           <label className='block font-semibold mb-1'>Số phòng</label>
@@ -115,20 +166,34 @@ const AdminEditAddRoom = () => {
             name='roomNumber'
             value={formData.roomNumber}
             onChange={handleChange}
-            required
-            className='w-full border px-3 py-2 rounded'
+            className={`w-full border px-3 py-2 rounded ${
+              errors.roomNumber ? 'border-red-500' : ''
+            }`}
           />
+          {errors.roomNumber && (
+            <p className='text-red-600 text-sm mt-1'>{errors.roomNumber}</p>
+          )}
         </div>
         <div>
           <label className='block font-semibold mb-1'>Loại phòng</label>
-          <input
-            type='text'
+          <select
             name='roomType'
             value={formData.roomType}
             onChange={handleChange}
-            required
-            className='w-full border px-3 py-2 rounded'
-          />
+            className={`w-full border px-3 py-2 rounded ${
+              errors.roomType ? 'border-red-500' : ''
+            }`}
+          >
+            <option value='' disabled>
+              -- Chọn loại phòng --
+            </option>
+            <option value='single'>Phòng đơn (Single)</option>
+            <option value='double'>Phòng đôi (Double)</option>
+            <option value='suite'>Phòng Suite</option>
+          </select>
+          {errors.roomType && (
+            <p className='text-red-600 text-sm mt-1'>{errors.roomType}</p>
+          )}
         </div>
         <div>
           <label className='block font-semibold mb-1'>Giá (VND)</label>
@@ -137,9 +202,13 @@ const AdminEditAddRoom = () => {
             name='price'
             value={formData.price}
             onChange={handleChange}
-            required
-            className='w-full border px-3 py-2 rounded'
+            className={`w-full border px-3 py-2 rounded ${
+              errors.price ? 'border-red-500' : ''
+            }`}
           />
+          {errors.price && (
+            <p className='text-red-600 text-sm mt-1'>{errors.price}</p>
+          )}
         </div>
         <div>
           <label className='block font-semibold mb-1'>Trạng thái</label>
@@ -151,6 +220,7 @@ const AdminEditAddRoom = () => {
           >
             <option value='available'>Còn trống</option>
             <option value='booked'>Đã đặt</option>
+            <option value='maintenance'>Bảo trì</option>
           </select>
         </div>
         <div>
@@ -160,8 +230,13 @@ const AdminEditAddRoom = () => {
             value={formData.description}
             onChange={handleChange}
             rows='3'
-            className='w-full border px-3 py-2 rounded'
+            className={`w-full border px-3 py-2 rounded ${
+              errors.description ? 'border-red-500' : ''
+            }`}
           ></textarea>
+          {errors.description && (
+            <p className='text-red-600 text-sm mt-1'>{errors.description}</p>
+          )}
         </div>
         <div>
           <label className='block font-semibold mb-1'>Ảnh hiện có</label>
