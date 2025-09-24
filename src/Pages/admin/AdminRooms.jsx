@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRooms } from '../../redux/reducers/roomSlice';
+import { fetchRooms, deleteRoom } from '../../redux/reducers/roomSlice';
 import { Link } from 'react-router-dom';
 
 const AdminRooms = () => {
@@ -10,6 +10,12 @@ const AdminRooms = () => {
   useEffect(() => {
     dispatch(fetchRooms());
   }, [dispatch]);
+
+  const deleteRoomHandler = (id) => {
+    if (window.confirm('Bạn có chắc chắn muốn xóa phòng này?')) {
+      dispatch(deleteRoom(id));
+    }
+  };
 
   if (loading) return <p className='p-6'>Đang tải dữ liệu...</p>;
   if (error) return <p className='p-6 text-red-600'>Lỗi: {error}</p>;
@@ -77,7 +83,10 @@ const AdminRooms = () => {
                   >
                     Sửa
                   </Link>
-                  <button className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'>
+                  <button
+                    onClick={() => deleteRoomHandler(room._id)}
+                    className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'
+                  >
                     Xóa
                   </button>
                 </td>

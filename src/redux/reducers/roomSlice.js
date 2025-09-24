@@ -6,13 +6,23 @@ export const fetchRooms = createAsyncThunk("room/fetchRooms", async () => {
     const res = await axios.get("/rooms");
     return res.data;
 });
-export const deleteRoom = createAsyncThunk("room/deleteRoom", async (id, { getState }) => {
-    const { token } = getState().user;
-    const res = await axios.delete(`/rooms/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.data;
-});
+export const deleteRoom = createAsyncThunk(
+    "room/deleteRoom",
+    async (id, { getState, rejectWithValue }) => {
+        try {
+            const { token } = getState().user;
+            if (!token) throw new Error("Bạn chưa đăng nhập");
+
+            await axios.delete(`/rooms/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            return id;
+        } catch (err) {
+            return rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+);
 
 export const fetchRoomById = createAsyncThunk("room/fetchRoomById", async (id) => {
     const res = await axios.get(`/rooms/${id}`);
@@ -213,6 +223,21 @@ const roomSlice = createSlice({
             .addCase(deleteRoomImage.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Không thể xóa ảnh";
+            })
+            .addCase(deleteRoom.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(deleteRoom.fulfilled, (state, action) => {
+                state.loading = false;
+                const deletedRoomId = action.payload;
+                state.rooms = state.rooms.filter(
+                    (room) => room._id !== deletedRoomId
+                );
+            })
+            .addCase(deleteRoom.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
             });
     },
 });

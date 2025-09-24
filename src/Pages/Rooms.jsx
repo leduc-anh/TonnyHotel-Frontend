@@ -104,7 +104,7 @@ const Rooms = () => {
               >
                 <div className='w-1/2 h-full'>
                   <img
-                    src={`/rooms/${room.images[0]}`}
+                    src={`http://localhost:5000/rooms/${room.images[0]}`}
                     alt={room.roomType}
                     className='w-full h-full object-cover'
                   />
